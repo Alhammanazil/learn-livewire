@@ -1,166 +1,156 @@
-<div>
-    <div
-        class="max-w-4xl mx-auto mt-10 mb-16 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_10px_30px_rgba(0,0,0,0.06)]">
-        {{-- Header --}}
-        <div
-            class="flex flex-col gap-2 border-b border-gray-100 px-8 pt-7 pb-5 md:flex-row md:items-center md:justify-between">
-            <div>
-                <h2 class="text-2xl font-semibold text-gray-900">Users</h2>
-                <p class="mt-1 text-sm text-gray-500">
-                    Create and manage users for your app.
-                </p>
-            </div>
+<div class="mx-auto max-w-6xl px-4 pb-4 md:px-6">
+    {{-- Header --}}
+    <div class="mt-10 mb-8 text-center md:mb-10">
+        <h1 class="text-2xl font-semibold text-neutral-900">Users</h1>
+        <p class="mt-1 text-sm text-neutral-500">Create a new user and browse the list.</p>
+    </div>
 
-            {{-- Button --}}
-            <div class="flex items-center gap-3">
-                @if (!$showForm)
-                    <button wire:click="showFormPanel"
-                        class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 active:scale-[0.99]">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
-                        Create User
-                    </button>
-                @else
-                    <button wire:click="hideFormPanel"
-                        class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 active:scale-[0.99]">
-                        Cancel
-                    </button>
-                @endif
+    {{-- Two columns --}}
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+        {{-- Left: Form --}}
+        <div class="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <h2 class="mb-6 text-center text-lg font-medium text-neutral-900">Create New User</h2>
 
-                @if ($showTable)
-                    <button wire:click="hideUsers"
-                        class="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800 active:scale-[0.99]">
-                        Hide Users
-                    </button>
-                @else
-                    <button wire:click="showUsers"
-                        class="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800 active:scale-[0.99]">
-                        Show Users
-                    </button>
+            <form wire:submit.prevent="storeUser" class="space-y-5">
+                {{-- Name --}}
+                <div>
+                    <label for="name" class="block text-sm font-medium text-neutral-700">Name</label>
+                    <input id="name" type="text" wire:model.defer="name" @class([
+                        'mt-1 block w-full rounded-md border bg-white px-3 py-2 text-sm text-neutral-900 shadow-sm transition focus:outline-none focus:ring-2',
+                        'border-neutral-300 focus:border-neutral-900 focus:ring-neutral-900' => !$errors->has(
+                            'name'),
+                        'border-red-500 focus:border-red-600 focus:ring-red-600' => $errors->has(
+                            'name'),
+                    ])
+                        placeholder="Your Name Here" />
+                    @error('name')
+                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- Email --}}
+                <div>
+                    <label for="email" class="block text-sm font-medium text-neutral-700">Email address</label>
+                    <input id="email" type="email" wire:model.defer="email" @class([
+                        'mt-1 block w-full rounded-md border bg-white px-3 py-2 text-sm text-neutral-900 shadow-sm transition focus:outline-none focus:ring-2',
+                        'border-neutral-300 focus:border-neutral-900 focus:ring-neutral-900' => !$errors->has(
+                            'email'),
+                        'border-red-500 focus:border-red-600 focus:ring-red-600' => $errors->has(
+                            'email'),
+                    ])
+                        placeholder="you@example.com" />
+                    @error('email')
+                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- Password --}}
+                <div>
+                    <label for="password" class="block text-sm font-medium text-neutral-700">Password</label>
+                    <input id="password" type="password" wire:model.defer="password" @class([
+                        'mt-1 block w-full rounded-md border bg-white px-3 py-2 text-sm text-neutral-900 shadow-sm transition focus:outline-none focus:ring-2',
+                        'border-neutral-300 focus:border-neutral-900 focus:ring-neutral-900' => !$errors->has(
+                            'password'),
+                        'border-red-500 focus:border-red-600 focus:ring-red-600' => $errors->has(
+                            'password'),
+                    ])
+                        placeholder="••••••" />
+                    @error('password')
+                        <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- Avatar --}}
+                <div>
+                    <label for="avatar" class="block text-sm font-medium text-neutral-700">Profile Picture</label>
+                    <div class="mt-1 rounded-md border border-dashed border-neutral-300 bg-neutral-50 p-4 text-center">
+                        <input id="avatar" type="file" wire:model="avatar"
+                            accept="image/png, image/jpeg, image/jpg"
+                            class="block w-full text-sm text-neutral-700 file:mr-3 file:rounded-md file:border-0 file:bg-neutral-900 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white hover:file:bg-neutral-800" />
+                        <p class="mt-2 text-xs text-neutral-500">PNG, JPG up to 5MB</p>
+                        @error('avatar')
+                            <p class="mt-2 text-xs text-red-600">{{ $message }}</p>
+                        @enderror
+                        <div class="mt-3 flex items-center justify-center">
+                            @if ($avatar)
+                                <img src="{{ $avatar->temporaryUrl() }}" alt="Preview"
+                                    class="h-14 w-14 rounded-full border border-neutral-200 object-cover">
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="inline-flex w-full items-center justify-center gap-2 rounded-md bg-neutral-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
+                    wire:loading.attr="disabled" wire:target="storeUser">
+                    <svg wire:loading wire:target="storeUser" xmlns="http://www.w3.org/2000/svg"
+                        class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    <span wire:loading.remove wire:target="storeUser">Create new user</span>
+                    <span wire:loading wire:target="storeUser">Creating...</span>
+                </button>
+
+                @if (session('success'))
+                    <div class="rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-800">
+                        {{ session('success') }}</div>
                 @endif
-            </div>
+            </form>
         </div>
 
-        {{-- Flash success --}}
-        @if (session('success'))
-            <div class="mx-8 mt-5 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-green-800">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        {{-- FORM --}}
-        @if ($showForm)
-            <div class="px-8 py-7">
-                <form wire:submit.prevent="storeUser" class="grid grid-cols-1 gap-6 md:grid-cols-2">
-                    {{-- Name --}}
-                    <div class="md:col-span-2">
-                        <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-                        <input id="name" type="text" wire:model.defer="name" @class([
-                            'mt-1 block w-full rounded-xl border bg-white px-3 py-2 text-gray-900 shadow-sm transition focus:outline-none focus:ring-2',
-                            'border-gray-300 focus:border-gray-900 focus:ring-gray-900' => !$errors->has(
-                                'name'),
-                            'border-red-500 focus:border-red-600 focus:ring-red-600' => $errors->has(
-                                'name'),
-                        ])
-                            placeholder="Your Name Here" aria-invalid="{{ $errors->has('name') ? 'true' : 'false' }}" />
-                        <p class="mt-1 text-xs text-gray-500">Minimal 3 karakter.</p>
-                        @error('name')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    {{-- Email --}}
-                    <div class="md:col-span-1">
-                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                        <input wire:model.defer="email" id="email" type="email" @class([
-                            'mt-1 block w-full rounded-xl border bg-white px-3 py-2 text-gray-900 shadow-sm transition focus:outline-none focus:ring-2',
-                            'border-gray-300 focus:border-gray-900 focus:ring-gray-900' => !$errors->has(
-                                'email'),
-                            'border-red-500 focus:border-red-600 focus:ring-red-600' => $errors->has(
-                                'email'),
-                        ])
-                            placeholder="Your Email Here" />
-                        <p class="mt-1 text-xs text-gray-500">Pastikan email unik.</p>
-                        @error('email')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    {{-- Password --}}
-                    <div class="md:col-span-1">
-                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                        <input id="password" type="password" wire:model.defer="password" @class([
-                            'mt-1 block w-full rounded-xl border bg-white px-3 py-2 text-gray-900 shadow-sm transition focus:outline-none focus:ring-2',
-                            'border-gray-300 focus:border-gray-900 focus:ring-gray-900' => !$errors->has(
-                                'password'),
-                            'border-red-500 focus:border-red-600 focus:ring-red-600' => $errors->has(
-                                'password'),
-                        ])
-                            placeholder="Your Password Here" />
-                        <p class="mt-1 text-xs text-gray-500">Minimal 6 karakter.</p>
-                        @error('password')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    {{-- Actions --}}
-                    <div class="md:col-span-2 flex items-center justify-between pt-2">
-                        <div class="text-xs text-gray-500">Tip: tekan <kbd class="rounded border px-1">Enter</kbd> untuk
-                            menyimpan.</div>
-
-                        <button type="submit"
-                            class="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60"
-                            wire:loading.attr="disabled" wire:target="storeUser">
-                            <svg wire:loading wire:target="storeUser" xmlns="http://www.w3.org/2000/svg"
-                                class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path class="opacity-25" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 4v2m0 12v2m8-8h-2M6 12H4m12.364 6.364l-1.414-1.414M7.05 7.05L5.636 5.636m12.728 0l-1.414 1.414M7.05 16.95l-1.414 1.414" />
-                            </svg>
-                            Save
-                        </button>
-                    </div>
+        {{-- Right: Users List --}}
+        <div class="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <h2 class="mb-4 text-center text-lg font-medium text-neutral-900">Users List</h2>
+            <div class="mb-4">
+                <form wire:submit.prevent="submitSearch" class="relative">
+                    <span class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
+                        <svg class="h-4 w-4 text-neutral-500" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 20 20" aria-hidden="true">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                        </svg>
+                    </span>
+                    <input type="search" id="default-search" wire:model.live.debounce.250ms="search"
+                        class="block w-full rounded-md border border-neutral-300 bg-white ps-10 pe-28 py-2.5 text-sm text-neutral-900 shadow-sm focus:border-neutral-900 focus:outline-none focus:ring-2 focus:ring-neutral-900"
+                        placeholder="Search users by name or email..." />
+                    <button type="submit"
+                        class="absolute end-1.5 bottom-1.5 rounded-md bg-neutral-900 px-3 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-neutral-800">
+                        Search
+                    </button>
                 </form>
             </div>
-        @endif
 
-        {{-- TABLE --}}
-        @if ($showTable)
-            <div class="px-8 pb-8">
-                <div class="overflow-hidden rounded-xl border border-gray-200">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                                    Name</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                                    Email</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                                    Created</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100 bg-white">
-                            @forelse ($users as $user)
-                                <tr class="hover:bg-gray-50/60">
-                                    <td class="whitespace-nowrap px-6 py-4 font-medium text-gray-900">
-                                        {{ $user->name }}</td>
-                                    <td class="whitespace-nowrap px-6 py-4 text-gray-600">{{ $user->email }}</td>
-                                    <td class="whitespace-nowrap px-6 py-4 text-gray-500">
-                                        {{ $user->created_at->diffForHumans() }}</td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="3" class="px-6 py-8 text-center text-gray-500">Belum ada user.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
+            <ul role="list" class="divide-y divide-neutral-200">
+                @forelse ($users as $user)
+                    <li class="flex items-center justify-between gap-4 py-3">
+                        <div class="flex min-w-0 items-center gap-3">
+                            @if ($user->avatar)
+                                <img src="{{ asset('storage/' . $user->avatar) }}" alt="{{ $user->name }}"
+                                    class="h-9 w-9 flex-none rounded-full object-cover" />
+                            @else
+                                <div
+                                    class="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-neutral-200 text-[11px] font-medium text-neutral-600">
+                                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                                </div>
+                            @endif
+                            <div class="min-w-0">
+                                <p class="truncate text-sm font-medium text-neutral-900">{{ $user->name }}</p>
+                                <p class="truncate text-xs text-neutral-500">{{ $user->email }}</p>
+                            </div>
+                        </div>
+                        <div class="hidden shrink-0 text-xs text-neutral-500 sm:block">Joined
+                            {{ $user->created_at->diffForHumans() }}</div>
+                    </li>
+                @empty
+                    <li class="py-10 text-center text-sm text-neutral-500">Belum ada user.</li>
+                @endforelse
+            </ul>
+
+            <div class="mt-4">
+                {{ $users->links() }}
             </div>
-        @endif
+        </div>
     </div>
+    {{-- /Two columns --}}
 </div>
