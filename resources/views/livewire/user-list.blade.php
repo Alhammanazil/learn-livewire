@@ -1,5 +1,8 @@
         <div wire:poll.visible class="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
-            <h2 class="mb-4 text-center text-lg font-medium text-neutral-900">Users List</h2>
+            <div class="mb-4 text-center">
+                <h2 class="text-lg font-medium text-neutral-900">Users</h2>
+                <p class="mt-0.5 text-xs text-neutral-500">Manage registered users & avatars.</p>
+            </div>
             <div class="mb-4">
                 <form wire:submit.prevent="submitSearch" class="relative">
                     <span class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
@@ -20,7 +23,8 @@
             </div>
 
             <ul role="list" class="divide-y divide-neutral-200">
-                @forelse ($this->users as $user)
+                @php($collection = $this->users)
+                @forelse ($collection as $user)
                     <li class="flex items-center justify-between gap-4 py-3">
                         <div class="flex min-w-0 items-center gap-3">
                             @if ($user->avatar)
@@ -41,11 +45,17 @@
                             {{ $user->created_at->diffForHumans() }}</div>
                     </li>
                 @empty
-                    <li class="py-10 text-center text-sm text-neutral-500">Belum ada user.</li>
+                    <li class="py-10 text-center text-sm text-neutral-500">
+                        @if ($search)
+                            No users match your search.
+                        @else
+                            No users found yet.
+                        @endif
+                    </li>
                 @endforelse
             </ul>
 
             <div class="mt-4">
-                {{ $this->users->links() }}
+                {{ $collection->links() }}
             </div>
         </div>

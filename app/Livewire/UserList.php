@@ -34,9 +34,15 @@ class UserList extends Component
     #[Computed()]
     public function users()
     {
-        return User::latest()
-            ->where('name', 'like', '%' . $this->search . '%')
-            ->orWhere('email', 'like', '%' . $this->search . '%')
+        return User::query()
+            ->when($this->search, function ($q) {
+                $term = '%' . $this->search . '%';
+                $q->where(function ($qq) use ($term) {
+                    $qq->where('name', 'like', $term)
+                        ->orWhere('email', 'like', $term);
+                });
+            })
+            ->latest()
             ->paginate(6);
     }
 }

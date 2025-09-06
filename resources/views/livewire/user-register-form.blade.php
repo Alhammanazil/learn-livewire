@@ -1,5 +1,8 @@
         <div class="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
-            <h2 class="mb-6 text-center text-lg font-medium text-neutral-900">Create New User</h2>
+            <div class="mb-6 text-center">
+                <h2 class="text-lg font-medium text-neutral-900">Create New User</h2>
+                <p class="mt-1 text-xs text-neutral-500">Add a user with secure password & optional avatar.</p>
+            </div>
 
             <form wire:submit.prevent="storeUser" class="space-y-5">
                 {{-- Name --}}
@@ -71,7 +74,7 @@
                 </div>
 
                 <button type="submit"
-                    class="inline-flex w-full items-center justify-center gap-2 rounded-md bg-neutral-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
+                    class="inline-flex w-full items-center justify-center gap-2 rounded-md bg-neutral-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
                     wire:loading.attr="disabled" wire:target="storeUser">
                     <svg wire:loading wire:target="storeUser" xmlns="http://www.w3.org/2000/svg"
                         class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
