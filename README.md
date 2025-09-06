@@ -5,7 +5,7 @@
 <p align="left">A concise <strong>Laravel 12 + Livewire v3</strong> portfolio application demonstrating user management (create + avatar upload + live search & pagination), a contact form, and a cohesive neutral UI.</p>
 
 <p align="center">
-	<img src="public/storage/images/screenshot.png" alt="Application Preview" width="860" />
+	<img src="public/screenshot.png" alt="Application Preview" width="860" />
 </p>
 
 ## Key Features
